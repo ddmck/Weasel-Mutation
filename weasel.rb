@@ -73,7 +73,6 @@ puts SAMPLE.length
 counter = 1
 
 puts donLeven(generation[0], SAMPLE)
-puts levenshtein_distance(generation[0], SAMPLE)
 
 until donLeven(fittest, SAMPLE) == 0 or counter == 100
   generation = multiplier(fittest, 100)
