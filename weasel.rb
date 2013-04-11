@@ -1,9 +1,7 @@
 def stringGen(sample)
-  counter = 0
   result = "" 
-  until counter == sample.length
+  (0...sample.length).each do
     result << letterSelect()
-    counter += 1
   end
   puts result
   return result
@@ -17,47 +15,39 @@ end
 
 def multiplier(parent, no_of_children)
   children = []
-  counter = 0
-  until counter == no_of_children
+  (0..no_of_children).each do |count|
     children << mutator(parent)
-    counter += 1
   end
   return children
 end
 
 def mutator(clone)
-  counter = 0
   letters = clone.split("")
-  until counter == letters.length 
+  (0...letters.length).each do |count| 
     if rand(19) == 0
-      letters[counter] = letterSelect()
+      letters[count] = letterSelect()
     end
-    counter += 1
   end
   return letters.join
 end
 
 def pickFittest(prev_fit, generation, sample, target)
   fittest = prev_fit
-  counter = 0
-  until counter == generation.length
-    if donLeven(generation[counter], sample) <= target
-      target = donLeven(generation[counter], sample)
-      fittest = generation[counter]
+  (0...generation.length).each do |count|
+    if donLeven(generation[count], sample) <= target
+      target = donLeven(generation[count], sample)
+      fittest = generation[count]
     end
-    counter += 1
   end
   return fittest, target
 end
 
 def donLeven(attempt, target)
-  counter = 0
   score = 0
-  until counter == target.length
-    unless attempt[counter] == target[counter]
+  (0...target.length).each do |count|
+    unless attempt[count] == target[count]
       score +=1
     end
-    counter += 1
   end
   return score
 end
@@ -65,18 +55,13 @@ end
 SAMPLE = "methinks it is a weasel"
 
 generation = multiplier(stringGen(SAMPLE), 100)
-
 fittest, target = pickFittest(generation[0], generation, SAMPLE, SAMPLE.length)
-puts "fittest = #{fittest} - #{donLeven(fittest, SAMPLE)}"
+puts "fittest = #{fittest} score: #{donLeven(fittest, SAMPLE)} step: 1"
+step = 2
 
-puts SAMPLE.length
-counter = 1
-
-puts donLeven(generation[0], SAMPLE)
-
-until donLeven(fittest, SAMPLE) == 0 or counter == 100
+until donLeven(fittest, SAMPLE) == 0 or step == 100
   generation = multiplier(fittest, 100)
   fittest, target = pickFittest(fittest, generation, SAMPLE, target)
-  puts "fittest = #{fittest} - #{donLeven(fittest, SAMPLE)} count: #{counter}"
-  counter += 1
+  puts "fittest = #{fittest} score: #{donLeven(fittest, SAMPLE)} step: #{step}"
+  step += 1
 end
